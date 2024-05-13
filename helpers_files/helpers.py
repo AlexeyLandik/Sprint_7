@@ -14,11 +14,12 @@ class Courier:
         random_string = ''.join(random.choice(letters) for i in range(length))
         return random_string
 
+    @staticmethod
     @allure.step('Получение случайных данных для создания курьера')
-    def courier_datas_creation(self, length):
-        login = self.generate_random_string(length)
-        password = self.generate_random_string(length)
-        first_name = self.generate_random_string(length)
+    def courier_datas_creation(length):
+        login = Courier.generate_random_string(length)
+        password = Courier.generate_random_string(length)
+        first_name = Courier.generate_random_string(length)
         payload = {
             "login": login,
             "password": password,
@@ -40,7 +41,11 @@ class Courier:
     @allure.step('Регистрация курьера и возврат ответа сервера')
     def register_courier(self, user_data: dict):
         response = requests.post(data.CREATE_COURIER, data=user_data)
-        print(response.text)
+        return response.json()
+
+    @allure.step('Удаление курьера')
+    def delete_courier(self, id_courier=3):
+        response = requests.delete(data.DELETE_COURIER + id_courier)
         return response.json()
 
 

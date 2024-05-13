@@ -1,6 +1,7 @@
+from helpers_files.helpers import Order
 import json
 import pytest
-from helpers import Order
+
 import allure
 
 
@@ -9,7 +10,6 @@ class TestCreateOrders:
 
     @allure.title('Тест. Создание заказа. Указан один цвет, два цвета, не указан цвет. Код 201, запрос возвращает track'
                   ' номер')
-    # 1. Создание заказа. Указан один цвет, два цвета, не указан цвет. Код 201, запрос возвращает track номер
     @pytest.mark.parametrize(
         'color_value',
         [
@@ -26,7 +26,6 @@ class TestCreateOrders:
         assert response.status_code == 201 and 'track' in response.text
 
     @allure.title('Тест. Список заказов. Получение списка заказов. Приходит список заказов')
-    # 2. Список заказов. Получение списка заказов. Приходит список заказов
     def test_get_order_list(self):
         order = Order
         response = order.get_order_list()

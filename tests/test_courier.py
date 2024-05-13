@@ -1,4 +1,4 @@
-from helpers import Courier
+from helpers_files.helpers import Courier
 import requests
 import data
 import allure
@@ -7,30 +7,22 @@ import allure
 @allure.story('Тестирование Курьера')
 class TestCreateCourier:
 
-    @allure.title("Тест. Создание курьера. Успешное создание. Код 200, запрос возвращает словарь ok: True")
-    def test_create_courier_successful(self):
-        courier = Courier()
-        new_courier_data = courier.courier_datas_creation(10)
-        response = requests.post(data.CREATE_COURIER, data=new_courier_data)
+    @allure.title('Тест. Создание курьера. Успешное создание. Код 201, запрос возвращает словарь ok: True')
+    def test_create_courier_successful_1(self, courier):
+        response = requests.post(data.CREATE_COURIER, data=courier)
         assert response.status_code == 201 and response.text == '{"ok":true}'
 
     @allure.title('Тест. Создание курьера. Ошибка создания. Код 400, "Недостаточно данных для создания учетной записи"')
-    def test_create_courier_no_password_not_successful(self):
-        courier = Courier()
-        new_courier_data = courier.courier_datas_creation(10)
-        new_courier_data.pop('password')
-        response = requests.post(data.CREATE_COURIER, data=new_courier_data)
+    def test_create_courier_no_password_not_successful(self, courier):
+        courier.pop('password')
+        response = requests.post(data.CREATE_COURIER, data=courier)
         assert response.status_code == 400 and response.json()['message'] == ("Недостаточно данных для создания "
                                                                               "учетной записи")
 
     @allure.title('Тест. Создание курьера. Ошибка создания. Код 409, "Этот логин уже используется"')
-    def test_create_courier_exists_login_not_successful(self):
-        courier = Courier()
-        new_courier_data_1 = courier.courier_datas_creation(10)
-        requests.post(data.CREATE_COURIER, data=new_courier_data_1)
-        new_courier_data_2 = courier.courier_datas_creation(10)
-        new_courier_data_2['login'] = new_courier_data_1['login']
-        response = requests.post(data.CREATE_COURIER, data=new_courier_data_2)
+    def test_create_courier_exists_login_not_successful(self, courier):
+        requests.post(data.CREATE_COURIER, data=courier)
+        response = requests.post(data.CREATE_COURIER, data=courier)
         assert response.status_code == 409 and response.json()[
             'message'] == "Этот логин уже используется. Попробуйте другой."
 
