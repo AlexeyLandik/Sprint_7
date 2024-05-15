@@ -21,7 +21,7 @@ class TestCreateCourier:
 
     @allure.title('Тест. Создание курьера. Ошибка создания. Код 409, "Этот логин уже используется"')
     def test_create_courier_exists_login_not_successful(self, courier):
-        requests.post(Data.CREATE_COURIER, data=courier)
+        requests.post(Data.CREATE_OR_DELETE_COURIER, data=courier)
         response = requests.post(Data.CREATE_OR_DELETE_COURIER, data=courier)
         assert response.status_code == 409 and response.json()[
             'message'] == "Этот логин уже используется. Попробуйте другой."
