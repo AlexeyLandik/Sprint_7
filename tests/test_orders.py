@@ -1,7 +1,7 @@
 from helpers_files.helpers import Order
 import json
 import pytest
-
+from data import Data
 import allure
 
 
@@ -19,10 +19,10 @@ class TestCreateOrders:
             []
         ]
     )
-    def test_create_order_with_color(self, order_data, color_value):
-        order = Order(order_data)
-        order_data["color"] = color_value
-        response = order.create_order(json.dumps(order_data))
+    def test_create_order_with_color(self, color_value):
+        order = Order()
+        Data.ORDER_DATA["color"] = color_value
+        response = order.create_order(json.dumps(Data.ORDER_DATA))
         assert response.status_code == 201 and 'track' in response.text
 
     @allure.title('Тест. Список заказов. Получение списка заказов. Приходит список заказов')

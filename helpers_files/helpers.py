@@ -1,7 +1,7 @@
 import requests
 import random
 import string
-import data
+from data import Data
 import allure
 
 
@@ -31,7 +31,7 @@ class Courier:
     def register_new_courier_and_return_login_password_first_name(self):
         login_pass = []
         payload = self.courier_datas_creation(10)
-        response = requests.post(data.CREATE_COURIER, data=payload)
+        response = requests.post(Data.CREATE_OR_DELETE_COURIER, data=payload)
         if response.status_code == 201:
             login_pass.append(payload['login'])
             login_pass.append(payload['password'])
@@ -40,28 +40,25 @@ class Courier:
 
     @allure.step('Регистрация курьера и возврат ответа сервера')
     def register_courier(self, user_data: dict):
-        response = requests.post(data.CREATE_COURIER, data=user_data)
+        response = requests.post(Data.CREATE_OR_DELETE_COURIER, data=user_data)
         return response.json()
 
     @allure.step('Удаление курьера')
     def delete_courier(self, id_courier=3):
-        response = requests.delete(data.DELETE_COURIER + id_courier)
+        response = requests.delete(Data.CREATE_OR_DELETE_COURIER + id_courier)
         return response.json()
 
 
 class Order:
 
-    def __init__(self, order_data):
-        self.order_data = order_data
-
     @staticmethod
     @allure.step('Создание заказа')
     def create_order(order_data):
-        response = requests.post(data.CREATE_ORDER, data=order_data)
+        response = requests.post(Data.CREATE_ORDER, data=order_data)
         return response
 
     @staticmethod
     @allure.step('Получение списка заказов')
     def get_order_list():
-        response = requests.get(data.CREATE_ORDER)
+        response = requests.get(Data.CREATE_ORDER)
         return response
